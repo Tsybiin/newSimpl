@@ -1,0 +1,65 @@
+version: '3.4'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/build/nginx
+      dockerfile: Dockerfile
+      args:
+        DIR_SITE_CONTAINER: $DIR_SITE_CONTAINER
+    ports:
+      - 80:80
+    volumes:
+      - $DIR_SITE_LOCAL:$DIR_SITE_CONTAINER
+    depends_on:
+      - php
+    restart:
+      always
+    networks:
+      default:
+        ipv4_address: $IP_NGINX
+
+  mysql:
+    container_name: mysql
+    build: ./docker/build/mysql
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_USER=bitrix
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=bitrix
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=Europe/Moscow
+    ports:
+      - '3310:3310'
+    networks:
+      default:
+        ipv4_address: ${IP_MYSQL}
+#  openvpn:
+#    cap_add:
+#      - NET_ADMIN
+#    image: kylemanna/openvpn
+#    container_name: openvpn
+#    ports:
+#      - "1194:1194/udp"
+#    restart: always
+#    volumes:
+#      - ./docker/build/openvpn:/etc/openvpn
+#      - ./docker/build/openvpn/log:/tmp/
+  php:
+    container_name: php-fpm
+    build: docker/build/php-fpm
+    volumes:
+      - ${DIR_SITE_LOCAL}:${DIR_SITE_CONTAINER}
+      - ./docker/build/php-fpm/hosts:/etc/hosts
+      - ./var/mail:/var/mail
+    networks:
+      default:
+        ipv4_address: 172.16.1.2
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
