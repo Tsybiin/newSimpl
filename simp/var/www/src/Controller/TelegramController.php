@@ -21,11 +21,7 @@ class TelegramController extends AbstractController
 
     private \TelegramBot\Api\BotApi $obBot;
     private mixed $idChat;
-    private mixed $textMenu = '<b>🌍Получите бесплатный VPN!🌍</b>
-<pre></pre>
-Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
-<pre></pre>
-<b>Навигация:</b>';
+    private mixed $textMenu;
 
     public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
@@ -55,17 +51,18 @@ class TelegramController extends AbstractController
      */
     public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
-
+        $this->setTextMenu();
         $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
-        // $res =    $bot->setWebhook('https://a4cef32a932e.ngrok-free.app/telegram');
         $arResponse['status'] = false;
+
         $obContent = $this->getDatacontent();
+
         if ($obContent) {
             if (property_exists($obContent, 'callback_query')) {
-                $commandBot = $obContent->callback_query['data'];
-                $this->idChat = $obContent->callback_query['message']['chat']['id'];
+                $commandBot = $obContent->data;
+                $this->idChat = $obContent->message['chat']['id'];
             } else {
-                dump($obContent);
+
                 $commandBot = $obContent->text;
                 $this->idChat = $obContent->chat['id'];;
             }
@@ -82,6 +79,7 @@ class TelegramController extends AbstractController
                         ["callback_data" => "/get_key", "text" => "🗝 Получить ключ 🗝"],
                         ["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"],
                     ];
+                    //  $array_keyboard[] = [["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"]];
 
                     $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
                     $this->obBot->sendMessage(
@@ -130,6 +128,22 @@ class TelegramController extends AbstractController
     }
 
     /**
+     * @return object|bool
+     */
+    private function setTextMenu()
+    {
+        $textMenu = '&#173;                        <b> 🌍Получите бесплатный VPN!🌍</b>
+<pre></pre>
+    Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
+    <pre></pre>
+<b>Навигация:</b>';
+        $textMenu .= '                                                                                  <a href="'
+            . $_ENV['SITE_DOMAIN'] . '">сайт</a>';
+        $this->textMenu = $textMenu;
+        return true;
+    }
+
+    /**
      * @param false $fake
      *
      * @return object|bool
@@ -137,16 +151,18 @@ class TelegramController extends AbstractController
     private function getDataContent($fake = false): object|bool
     {
         $obRequest = Request::createFromGlobals();
-       //  file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
+        //  file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
         $content = $fake ? file_get_contents('/usr/share/nginx/html/var/log/call.json') : $obRequest->getContent();
         $arContent = json_decode($content, true);
-        foreach (['callback_query','message'] as $v) {
-         if( array_key_exists($v,$arContent))  {
-             if($v =='callback_query' ) $arContent[$v][$v]=true;
-             return   (object)$arContent[$v];
-         }
+        foreach (['callback_query', 'message'] as $v) {
+            if (array_key_exists($v, $arContent)) {
+                if ($v == 'callback_query') {
+                    $arContent[$v][$v] = true;
+                }
+                return (object)$arContent[$v];
+            }
         }
-      return false;
+        return false;
     }
 
 }

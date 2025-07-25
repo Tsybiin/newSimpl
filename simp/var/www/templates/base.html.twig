@@ -47,13 +47,13 @@
                     <nav id="navbar">
                         <a href="#" class="nav-triger"><span class="fa fa-navicon"></span></a>
                         <ul class="main-menu nav">
-                            <li><a href="#section0">Вход</a></li>
-                            <li><a href="#section1">Получить бесплатно</a></li>
-                            <li><a href="#section2">Цены</a></li>
-                            <li><a href="#section3">О нас</a></li>
+{#                            <li><a href="#section0">Вход</a></li>#}
+                            <li><a href="{{ telegram_bot }}">Получить бесплатно</a></li>
+{#                            <li><a href="#section2">Цены</a></li>#}
+{#                            <li><a href="#section3">О нас</a></li>#}
                             <!--                <li><a href="#section3">Авто</a></li>-->
                             <!--                <li><a href="#section4">Отзывы</a></li>-->
-                            <li><a href="#section4">Контакты</a></li>
+{#                            <li><a href="#section4">Контакты</a></li>#}
                         </ul>
                     </nav>
 
@@ -63,16 +63,7 @@
             <section id="section0" class="header">
                 <div class="container">
                     <div class="row pb-5">
-                        <div class="col-lg-6">
-                            <h3 class="widget-title">Почему бесплатно? </h3>
-                            <p>Наш VPN совершенно бесплатный. Без ограничений по скорости и трафику, в отличие от 99% VPN сервисов, которые в бесплатных версиях ограничивают количество трафика или скорость соединения.</p>
-                            <p><strong>Почему бесплатно?</strong></p>
-                            <p>Мы - некоммерческая организация, создавшая в самом начале VPN на свои собственные деньги.&nbsp; Сейчас мы существуем за счет пожертвований наших благодарных клиентов.</p>
-                            <p>Мы придерживаемся мнения, что Интернет создан для людей, а не для прибыли. И он должен быть безопасным.</p>
-                            <p>Если вы довольны нашим сервисом и хотели бы помочь нам в развитии финансово:</p>
-                            <p><a class="btn btn-blue" href="">Поддержать VPN</a></p>
-                            <p>VPN - безопасный и бесплатный VPN.</p>
-                        </div>
+
                         <div class="col-lg-6 text-center">
                             <h3 class="widget-title">Абсолютно бесплатный VPN!</h3>
                             <div class="sms-test">
@@ -81,16 +72,27 @@
                                 <div class="description2">Бесплатный аккаунт VPN на 30 дней (продление тоже бесплатно)</div>
                                 <div class="text-center">
                                     <p></p>
-                                    <p><a target="_blank" class="btn" href="" id="freeProxyButton" onclick="ym(53819101,'reachGoal','test'); return true;">Получить бесплатный VPN</a></p>
+                                    <p><a target="_blank" class="btn" href="{{ telegram_bot }}" id="freeProxyButton" onclick="ym(53819101,'reachGoal','test'); return true;">Получить бесплатный VPN</a></p>
                                     <p style="text-align: center;"><strong>ИЛИ</strong></p>
-                                    <p><a href="" class="btn btn-blue"><i class="fab fa-telegram"></i> У Telegram бота</a></p>
+                                    <p><a href="{{ telegram_bot }}" class="btn btn-blue"><i class="fab fa-telegram"></i> У Telegram бота</a></p>
                                 </div>
                             </div>
 
 
-                            <p><a style="text-decoration: underline;" href=""><strong>Обсудить бесплатный VPN</strong></a></p>
+                            <p><a style="text-decoration: underline;" href="{{ telegram_bot }}"><strong>Обсудить бесплатный VPN</strong></a></p>
 
-                        </div>																						</div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h3 class="widget-title">Почему бесплатно? </h3>
+                            <p>Наш VPN совершенно бесплатный. Без ограничений по скорости и трафику, в отличие от 99% VPN сервисов, которые в бесплатных версиях ограничивают количество трафика или скорость соединения.</p>
+                            <p><strong>Почему бесплатно?</strong></p>
+                            <p>Мы - некоммерческая организация, создавшая в самом начале VPN на свои собственные деньги.&nbsp; Сейчас мы существуем за счет пожертвований наших благодарных клиентов.</p>
+                            <p>Мы придерживаемся мнения, что Интернет создан для людей, а не для прибыли. И он должен быть безопасным.</p>
+                            <p>Если вы довольны нашим сервисом и хотели бы помочь нам в развитии финансово:</p>
+                            <p><a class="btn btn-blue" href="{{ telegram_bot }}">Поддержать VPN</a></p>
+                            <p>VPN - безопасный и бесплатный VPN.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
             <section id="problems" class="blue-section">
@@ -128,7 +130,7 @@
                         <div class="col-lg-4">
                             <h4><span class="step-icon">3</span>Поехали!</h4>
                             <p>...и пользуйтесь Интернетом как обычно</p>
-                            <p><a target="_blank" class="btn btn-white" href="" id="freeProxyButton" onclick="ym(53819101,'reachGoal','test'); return true;">Получить бесплатный VPN</a></p>
+                            <p><a target="_blank" class="btn btn-white" href="{{ telegram_bot }}" id="freeProxyButton" onclick="ym(53819101,'reachGoal','test'); return true;">Получить бесплатный VPN</a></p>
                         </div>				</div>
                 </div>
             </section>

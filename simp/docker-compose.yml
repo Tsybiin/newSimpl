@@ -10,8 +10,10 @@ services:
         DIR_SITE_CONTAINER: $DIR_SITE_CONTAINER
     ports:
       - 80:80
+      - 443:443
     volumes:
       - $DIR_SITE_LOCAL:$DIR_SITE_CONTAINER
+      - ./docker/nginx/etc:/etc/letsencrypt
     depends_on:
       - php
     restart:
