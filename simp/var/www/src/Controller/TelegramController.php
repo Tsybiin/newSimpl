@@ -9,14 +9,25 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Log\Logger;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Psr\Log\LoggerInterface;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class TelegramController extends AbstractController
 {
 
+    private \TelegramBot\Api\BotApi $obBot;
+    private mixed $idChat;
+    private mixed $textMenu = '<b>🌍Получите бесплатный VPN!🌍</b>
+<pre></pre>
+Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
+<pre></pre>
+<b>Навигация:</b>';
 
-    public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator)
+    public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
         // 1. Определите путь к файлу.  Замените этот путь на реальный путь к вашему файлу.
         $filePath = '/usr/share/nginx/html/serf/public.pem';
@@ -38,17 +49,104 @@ class TelegramController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
-        $bot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
-   // $res =    $bot->setWebhook('https://c765e833289b.ngrok-free.app/telegram');
-        $request = Request::createFromGlobals();
-        $bot->sendMessage('5507845867', $request->getContent());
 
-        $arResponse['status'] = true;
-        $arResponse['data']['user_id'] = '776';
-        $arResponse['data']['email'] = 'tjtj@eg.ru';
+        $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
+        // $res =    $bot->setWebhook('https://a4cef32a932e.ngrok-free.app/telegram');
+        $arResponse['status'] = false;
+        $obContent = $this->getDatacontent();
+        if ($obContent) {
+            if (property_exists($obContent, 'callback_query')) {
+                $commandBot = $obContent->callback_query['data'];
+                $this->idChat = $obContent->callback_query['message']['chat']['id'];
+            } else {
+                dump($obContent);
+                $commandBot = $obContent->text;
+                $this->idChat = $obContent->chat['id'];;
+            }
+
+            file_put_contents('/usr/share/nginx/html/var/log/telegram.php', print_r($obContent, true));
+            switch ($commandBot) {
+                case '/get_key';
+                    $this->sendKey();
+                    break;
+                case '/start';
+                    $array_keyboard = [];
+                    // $this->obBot->sendPhoto($this->idChat,'https://s3m.tjcollection.ru/images/category/for_her_shoes.jpg');
+                    $array_keyboard[] = [
+                        ["callback_data" => "/get_key", "text" => "🗝 Получить ключ 🗝"],
+                        ["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"],
+                    ];
+
+                    $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
+                    $this->obBot->sendMessage(
+                        $this->idChat,
+                        $this->textMenu,
+                        'html',
+                        null,
+                        null,
+                        $inline_keyboard,
+
+                    );
+                    break;
+                case '/instruction';
+                    $this->sendInstruction();
+                    break;
+
+            }
+            $arResponse['status'] = true;
+        }
+
         return new Response($this->json($arResponse));
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function sendInstruction()
+    {
+        $urlKey = '/usr/share/nginx/html/key/testKey.txt';
+        $obDocument = new \CURLFile($urlKey);
+        $this->obBot->sendMessage($this->idChat, 'sendInstruction', 'html');
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function sendKey()
+    {
+        $urlKey = '/usr/share/nginx/html/key/testKey.txt';
+        $obDocument = new \CURLFile($urlKey);
+        $this->obBot->sendDocument($this->idChat, $obDocument);
+    }
+
+    /**
+     * @param false $fake
+     *
+     * @return object|bool
+     */
+    private function getDataContent($fake = false): object|bool
+    {
+        $obRequest = Request::createFromGlobals();
+       //  file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
+        $content = $fake ? file_get_contents('/usr/share/nginx/html/var/log/call.json') : $obRequest->getContent();
+        $arContent = json_decode($content, true);
+        foreach (['callback_query','message'] as $v) {
+         if( array_key_exists($v,$arContent))  {
+             if($v =='callback_query' ) $arContent[$v][$v]=true;
+             return   (object)$arContent[$v];
+         }
+        }
+      return false;
     }
 
 }
