@@ -2,17 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
-use App\Entity\User;
-use Cassandra\Date;
+use App\Repository\UserTGRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Log\Logger;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Psr\Log\LoggerInterface;
 use TelegramBot\Api\Exception;
 use TelegramBot\Api\InvalidArgumentException;
 
@@ -22,6 +17,7 @@ class TelegramController extends AbstractController
     private \TelegramBot\Api\BotApi $obBot;
     private mixed $idChat;
     private mixed $textMenu;
+    private object $obUser;
 
     public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
@@ -49,25 +45,35 @@ class TelegramController extends AbstractController
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
+    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository): Response
     {
         $this->setTextMenu();
         $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
+    //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
         $arResponse['status'] = false;
-
         $obContent = $this->getDatacontent();
-
         if ($obContent) {
             if (property_exists($obContent, 'callback_query')) {
                 $commandBot = $obContent->data;
                 $this->idChat = $obContent->message['chat']['id'];
             } else {
-
                 $commandBot = $obContent->text;
-                $this->idChat = $obContent->chat['id'];;
+                $this->idChat = $obContent->chat['id'];
+
+            }
+            $obUser = $obUserTGRepository->getUser($this->idChat);
+            // $keyService = new KeyService();
+            // $keyService->getKey();
+
+            if ($obUser) {
+                $this->obUser = $obUser;
+            } else {
+                $this->obUser = $obUserTGRepository->setUser((object)($obContent->from));
+                $this->obUser->setAuthDate();
             }
 
-            file_put_contents('/usr/share/nginx/html/var/log/telegram.php', print_r($obContent, true));
+            $obUserTGRepository->updateUser($this->obUser);
+
             switch ($commandBot) {
                 case '/get_key';
                     $this->sendKey();
@@ -97,8 +103,10 @@ class TelegramController extends AbstractController
                     break;
 
             }
+            $obUserTGRepository->updateUser($this->obUser);
             $arResponse['status'] = true;
         }
+
 
         return new Response($this->json($arResponse));
     }
@@ -110,8 +118,6 @@ class TelegramController extends AbstractController
      */
     private function sendInstruction()
     {
-        $urlKey = '/usr/share/nginx/html/key/testKey.txt';
-        $obDocument = new \CURLFile($urlKey);
         $this->obBot->sendMessage($this->idChat, 'sendInstruction', 'html');
     }
 
@@ -122,7 +128,7 @@ class TelegramController extends AbstractController
      */
     private function sendKey()
     {
-        $urlKey = '/usr/share/nginx/html/key/testKey.txt';
+        $urlKey = '/usr/share/nginx/html/keys/new/test.key';
         $obDocument = new \CURLFile($urlKey);
         $this->obBot->sendDocument($this->idChat, $obDocument);
     }
@@ -148,11 +154,14 @@ class TelegramController extends AbstractController
      *
      * @return object|bool
      */
-    private function getDataContent($fake = false): object|bool
+    private function getDataContent( bool $fake = false): object|bool
     {
         $obRequest = Request::createFromGlobals();
-        //  file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
+        if(!$fake){
+            file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
+        }
         $content = $fake ? file_get_contents('/usr/share/nginx/html/var/log/call.json') : $obRequest->getContent();
+     //   dump($content);
         $arContent = json_decode($content, true);
         foreach (['callback_query', 'message'] as $v) {
             if (array_key_exists($v, $arContent)) {
