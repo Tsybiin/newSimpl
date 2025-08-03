@@ -12,38 +12,54 @@ class KeyVpn
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $ID = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $NAME = null;
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    private ?int $id_user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $DATE_SEND = null;
+    private ?\DateTimeInterface $date_send = null;
+
+    public function setIdUser($idUser): ?int
+    {
+        $this->id_user = $idUser;
+        return $this->id_user;
+    }
+
+    public function getIdUser(): ?string
+    {
+        return $this->id_user;
+    }
 
     public function getId(): ?int
     {
-        return $this->ID;
-    }
-    public function getNAME(): ?string
-    {
-        return $this->NAME;
+        return $this->id;
     }
 
-    public function setNAME(string $NAME): static
+    public function getName(): ?string
     {
-        $this->NAME = $NAME;
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getDATESEND(): ?\DateTimeInterface
+    public function getDateSend(): ?\DateTimeInterface
     {
-        return $this->DATE_SEND;
+        return $this->date_send;
     }
-    public function setDATESEND(): static
+
+    public function setDateSend(): static
     {
-        $dataNow =  new \DateTime();
-        $this->DATE_SEND = $dataNow->setTimezone(new \DateTimeZone('Europe/Moscow'));
+        $dataNow = new \DateTime();
+        $this->date_send = $dataNow->setTimezone(new \DateTimeZone('Europe/Moscow'));
         return $this;
     }
 }

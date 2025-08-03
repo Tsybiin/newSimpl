@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserTGRepository;
+use App\Service\KeyFileService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,14 +47,13 @@ class TelegramController extends AbstractController
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository,loggerInterface $logger): Response
+    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository,loggerInterface $logger,KeyFileService $obKeyFileService): Response
     {
         $this->setTextMenu();
-        $logger->error('An error occurred');
         $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
     //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
         $arResponse['status'] = false;
-        $obContent = $this->getDatacontent();
+        $obContent = $this->getDatacontent(true);
         if ($obContent) {
             if (property_exists($obContent, 'callback_query')) {
                 $commandBot = $obContent->data;
@@ -64,9 +64,6 @@ class TelegramController extends AbstractController
 
             }
             $obUser = $obUserTGRepository->getUser($this->idChat);
-            // $keyService = new KeyService();
-            // $keyService->getKey();
-
             if ($obUser) {
                 $this->obUser = $obUser;
             } else {
@@ -78,7 +75,12 @@ class TelegramController extends AbstractController
 
             switch ($commandBot) {
                 case '/get_key';
-                    $this->sendKey();
+                    $obKey = $obKeyFileService->getOneKeyTG();
+                    if($obKey){
+                       $this->sendKey($obKey->path);
+                       $obKeyFileService->keyTransferSend($obKey);
+                    }
+
                     break;
                 case '/start';
                     $array_keyboard = [];
@@ -128,10 +130,9 @@ class TelegramController extends AbstractController
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    private function sendKey()
+    private function sendKey($path)
     {
-        $urlKey = '/usr/share/nginx/html/keys/new/test.key';
-        $obDocument = new \CURLFile($urlKey);
+        $obDocument = new \CURLFile($path);
         $this->obBot->sendDocument($this->idChat, $obDocument);
     }
 

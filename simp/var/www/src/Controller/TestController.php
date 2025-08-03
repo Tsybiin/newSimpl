@@ -14,29 +14,24 @@ use App\Entity\KeyVpn;
 use Symfony\Component\HttpKernel\Log\Logger;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\KeyFileService;
+use Symfony\Component\Finder\Finder;
 
 class TestController extends AbstractController
 {
-    public function test(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger,): Response
+    public function test(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger,KeyFileService $obKeyFileService ): Response
     {
-        $entityManager = $doctrine->getManager();
-        $obKeyVpn = new KeyVpn();
-        $obKeyVpn->setNAME('test');
-        $obKeyVpn->setDATESEND();
-        $errors = $validator->validate($obKeyVpn);
 
-        if ($errors->count() > 0) {
-            $arResponse['status'] = false;
-            $arResponse['error'] = $errors->offsetGet(0)
-                ->getMessage();
-        } else {
-            $entityManager->persist($obKeyVpn);
-            $entityManager->flush();
-            $arResponse['status'] = true;
-            $arResponse['data']['user_id'] = $obKeyVpn->getId();
-            $arResponse['data']['user_id'] = $obKeyVpn->getNAME();
-            $arResponse['data']['email'] = $obKeyVpn->getDATESEND();
-        }
+     //   $path = '/usr/share/nginx/html/config';
+
+
+        // найти все файлы текущего каталога
+ //    $res =   $finder->files()->in($path);
+
+     $res =   $obKeyFileService->getKey();
+dump($res);
+// dump($_ENV);
+        $arResponse['status'] = false;
         return new Response($this->json($arResponse));
 
 
