@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use TelegramBot\Api\Exception;
 use TelegramBot\Api\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 
 class TelegramController extends AbstractController
 {
@@ -19,7 +20,7 @@ class TelegramController extends AbstractController
     private mixed $textMenu;
     private object $obUser;
 
-    public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
+    public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator,loggerInterface $logger): Response
     {
         // 1. Определите путь к файлу.  Замените этот путь на реальный путь к вашему файлу.
         $filePath = '/usr/share/nginx/html/serf/public.pem';
@@ -45,9 +46,10 @@ class TelegramController extends AbstractController
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository): Response
+    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository,loggerInterface $logger): Response
     {
         $this->setTextMenu();
+        $logger->error('An error occurred');
         $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
     //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
         $arResponse['status'] = false;
