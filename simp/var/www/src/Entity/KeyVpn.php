@@ -14,26 +14,26 @@ class KeyVpn
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?int $id_user = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $id_user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_send = null;
 
-    public function setIdUser($idUser): ?int
+    public function getIdUser(): ?int
+    {
+        return $this->id_user;
+    }
+
+    public function setIdUser($idUser): static
     {
         $this->id_user = $idUser;
-        return $this->id_user;
-    }
+        return $this;
 
-    public function getIdUser(): ?string
-    {
-        return $this->id_user;
     }
-
     public function getId(): ?int
     {
         return $this->id;

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\KeyVpnRepository;
 use App\Repository\UserTGRepository;
 use App\Service\KeyFileService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,39 +22,19 @@ class TelegramController extends AbstractController
     private mixed $textMenu;
     private object $obUser;
 
-    public function sertif(ManagerRegistry $doctrine, ValidatorInterface $validator,loggerInterface $logger): Response
-    {
-        // 1. Определите путь к файлу.  Замените этот путь на реальный путь к вашему файлу.
-        $filePath = '/usr/share/nginx/html/serf/public.pem';
-
-        // 2. Проверьте существование файла.
-        if (!file_exists($filePath)) {
-            throw $this->createNotFoundException('Файл не найден.');
-        }
-
-        // 3. Создайте объект Response с файлом.
-        $response = new Response(file_get_contents($filePath));
-
-        // 4. Установите заголовки для скачивания файла.
-        $response->headers->set('Content-Type', 'application/octet-stream');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . 'public.pem' . '"');
-        $response->headers->set('Content-Length', filesize($filePath));
-
-        // 5. Верните ответ.
-        return $response;
-    }
-
     /**
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function sendSms(ManagerRegistry $doctrine, ValidatorInterface $validator,UserTGRepository $obUserTGRepository,loggerInterface $logger,KeyFileService $obKeyFileService): Response
-    {
+    public function sendSms(
+        ManagerRegistry $doctrine, ValidatorInterface $validator, UserTGRepository $obUserTGRepository,
+        loggerInterface $logger, KeyFileService $obKeyFileService, KeyVpnRepository $obKeyVpnRepository
+    ): Response {
         $this->setTextMenu();
         $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
     //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
         $arResponse['status'] = false;
-        $obContent = $this->getDatacontent(true);
+        $obContent = $this->getDatacontent();
         if ($obContent) {
             if (property_exists($obContent, 'callback_query')) {
                 $commandBot = $obContent->data;
@@ -79,6 +60,9 @@ class TelegramController extends AbstractController
                     if($obKey){
                        $this->sendKey($obKey->path);
                        $obKeyFileService->keyTransferSend($obKey);
+                        $obKeyVpnRepository->setKey($obKey,$this->obUser->getIdTelegram());
+                    }else{
+                        $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html');
                     }
 
                     break;
@@ -141,7 +125,7 @@ class TelegramController extends AbstractController
      */
     private function setTextMenu()
     {
-        $textMenu = '&#173;                        <b> 🌍Получите бесплатный VPN!🌍</b>
+        $textMenu = '&#173; <b> 🌍Получите бесплатный VPN!🌍</b>
 <pre></pre>
     Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
     <pre></pre>

@@ -14,25 +14,26 @@ class UserTG
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $id_telegram = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private string $id_telegram;
 
-    #[ORM\Column(length: 255)]
-    private ?string $first_name = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    public string $first_name;
 
-    #[ORM\Column(length: 255)]
-    private ?string $last_name = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    public string $last_name;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\JoinColumn(nullable: true)]
+    public string $username;
 
-    #[ORM\Column]
-    private ?int $id_open_vpn_key = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    public string $id_open_vpn_key;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_register = null;
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $auth_date = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $date_register;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public \DateTimeInterface $auth_date;
 
     public function getId(): ?int
     {

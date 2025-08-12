@@ -32,9 +32,9 @@ class UserTGRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $obUser = new UserTG();
-        $obUser->setFirstName($obValue->first_name);
-        $obUser->setLastName($obValue->last_name);
-        $obUser->setUsername($obValue->username);
+        $obUser->setFirstName(property_exists($obValue,'first_name') ? $obValue->first_name : '');
+        $obUser->setLastName(property_exists($obValue,'last_name') ? $obValue->last_name : '');
+        $obUser->setUsername(property_exists($obValue,'username') ? $obValue->username : '');
         $obUser->setIdTelegram($obValue->id);
         $obUser->setDateRegister();
         $obUser->setAuthDate();
@@ -56,9 +56,9 @@ class UserTGRepository extends ServiceEntityRepository
     {
         $obEnintyUserTG = $this->getEntityManager()->find(UserTG::class, $obUserTG->getId());
 
-        $obEnintyUserTG->setFirstName($obUserTG->getFirstName());
-        $obEnintyUserTG->setLastName($obUserTG->getLastName());
-        $obEnintyUserTG->setUsername($obUserTG->getUsername());
+        $obEnintyUserTG->setFirstName(property_exists($obUserTG, 'first_name') ? $obUserTG->first_name : '');
+        $obEnintyUserTG->setLastName(property_exists($obUserTG, 'last_name') ? $obUserTG->last_name : '');
+        $obEnintyUserTG->setUsername(property_exists($obUserTG, 'username') ? $obUserTG->username : '');
         $obEnintyUserTG->setIdTelegram($obUserTG->getIdTelegram());
         $obEnintyUserTG->setAuthDate();
 
