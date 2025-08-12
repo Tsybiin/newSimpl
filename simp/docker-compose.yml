@@ -25,8 +25,8 @@ services:
   mysql:
     container_name: mysql
     build: ./docker/build/mysql
-#    volumes:
-#      - ./docker/mysql:/var/lib/mysql
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
     environment:
       - MYSQL_USER=bitrix
       - MYSQL_PASSWORD=password
@@ -44,6 +44,7 @@ services:
     volumes:
       - ${DIR_SITE_LOCAL}:${DIR_SITE_CONTAINER}
       - ./docker/build/php-fpm/hosts:/etc/hosts
+      - ./docker/build/php-fpm/php.ini:/usr/local/etc/php/php.ini
       - ./var/mail:/var/mail
     networks:
       default:

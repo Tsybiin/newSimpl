@@ -10,14 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Exception;
 use TelegramBot\Api\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use TelegramBot\Api\BaseType;
 
 class TelegramController extends AbstractController
 {
 
-    private \TelegramBot\Api\BotApi $obBot;
+    private BotApi $obBot;
     private mixed $idChat;
     private mixed $textMenu;
     private object $obUser;
@@ -31,7 +33,7 @@ class TelegramController extends AbstractController
         loggerInterface $logger, KeyFileService $obKeyFileService, KeyVpnRepository $obKeyVpnRepository
     ): Response {
         $this->setTextMenu();
-        $this->obBot = new \TelegramBot\Api\BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
+        $this->obBot = new BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
     //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
         $arResponse['status'] = false;
         $obContent = $this->getDatacontent();
@@ -39,10 +41,11 @@ class TelegramController extends AbstractController
             if (property_exists($obContent, 'callback_query')) {
                 $commandBot = $obContent->data;
                 $this->idChat = $obContent->message['chat']['id'];
+                $this->callback_query = $obContent->id;
+               $this->obBot->answerCallbackQuery($this->callback_query);
             } else {
                 $commandBot = $obContent->text;
                 $this->idChat = $obContent->chat['id'];
-
             }
             $obUser = $obUserTGRepository->getUser($this->idChat);
             if ($obUser) {
@@ -53,16 +56,19 @@ class TelegramController extends AbstractController
             }
 
             $obUserTGRepository->updateUser($this->obUser);
-
+            $array_keyboard = [];
             switch ($commandBot) {
                 case '/get_key';
                     $obKey = $obKeyFileService->getOneKeyTG();
-                    if($obKey){
-                       $this->sendKey($obKey->path);
-                       $obKeyFileService->keyTransferSend($obKey);
-                        $obKeyVpnRepository->setKey($obKey,$this->obUser->getIdTelegram());
-                    }else{
+                    if ($obKey) {
+                        $this->sendKey($obKey->path);
+                        $obKeyFileService->keyTransferSend($obKey);
+                        $obKeyVpnRepository->setKey($obKey, $this->obUser->getIdTelegram());
+
+
+                    } else {
                         $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html');
+                        $this->sendInstruction();
                     }
 
                     break;
@@ -73,7 +79,10 @@ class TelegramController extends AbstractController
                         ["callback_data" => "/get_key", "text" => "🗝 Получить ключ 🗝"],
                         ["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"],
                     ];
-                    //  $array_keyboard[] = [["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"]];
+                      $array_keyboard[] = [
+                          ["url" => "https://telegra.ph/iBoost-Polzovatelskoe-soglashenie-08-12", "text" => "📖 Правила 📖"],
+                          ["url" => "https://t.me/share/url?url=t.me/a_test_table_bot&text=YOUR_TEXT", "text" => "🔗 Поделиться 🔗"]
+                      ];
 
                     $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
                     $this->obBot->sendMessage(
@@ -89,6 +98,10 @@ class TelegramController extends AbstractController
                 case '/instruction';
                     $this->sendInstruction();
                     break;
+                // case '/exit';
+                //
+                //         $this->obBot->editMessageReplyMarkup($this->idChat,   $this->idMessage,'remove_keyboard' => true);
+                //     break;
 
             }
             $obUserTGRepository->updateUser($this->obUser);
@@ -106,7 +119,12 @@ class TelegramController extends AbstractController
      */
     private function sendInstruction()
     {
-        $this->obBot->sendMessage($this->idChat, 'sendInstruction', 'html');
+        $text = '▪️Установите OpenVPN Connect (<a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn">ANDROID</a>,  <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981">IOS</a>)
+▪️👆Скачайте ключ конфигурации👆 Выше
+▪️Импортируйте его в программу и подключитесь.
+<a href="https://telegra.ph/instrukciya-08-12-17">Более подробная инструкция</a>';
+
+        $this->obBot->sendMessage($this->idChat, $text, 'html',true);
     }
 
     /**
@@ -116,8 +134,12 @@ class TelegramController extends AbstractController
      */
     private function sendKey($path)
     {
+        $array_keyboard[] = [
+            ["callback_data" => "/instruction", "text" => "📗 Инструкция по установке 📗"]
+        ];
+        $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
         $obDocument = new \CURLFile($path);
-        $this->obBot->sendDocument($this->idChat, $obDocument);
+        $this->obBot->sendDocument($this->idChat, $obDocument,'ключ openVpn',null, $inline_keyboard  );
     }
 
     /**
@@ -125,13 +147,13 @@ class TelegramController extends AbstractController
      */
     private function setTextMenu()
     {
-        $textMenu = '&#173; <b> 🌍Получите бесплатный VPN!🌍</b>
+        $textMenu = '&#173; <b> 🌍 Получите бесплатный VPN! 🌍 </b>
 <pre></pre>
-    Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
+Обойдите онлайн ограничения - безопасный, быстрый, безлимитный и удобный VPN. Наш бесплатный VPN поможет вам ускорить игру и защитить безопасность вашей сети в Интернете
+Предпочтительный способ для Android и iOS, также работает на компьютерах под любой ОС и маршрутизаторах.
     <pre></pre>
+  
 <b>Навигация:</b>';
-        $textMenu .= '                                                                                  <a href="'
-            . $_ENV['SITE_DOMAIN'] . '">сайт</a>';
         $this->textMenu = $textMenu;
         return true;
     }
