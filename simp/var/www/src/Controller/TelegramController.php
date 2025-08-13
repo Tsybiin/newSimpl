@@ -27,6 +27,7 @@ class TelegramController extends AbstractController
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws \Exception
      */
     public function sendSms(
         ManagerRegistry $doctrine, ValidatorInterface $validator, UserTGRepository $obUserTGRepository,
@@ -58,19 +59,46 @@ class TelegramController extends AbstractController
             $obUserTGRepository->updateUser($this->obUser);
             $array_keyboard = [];
             switch ($commandBot) {
-                case '/get_key';
-                    $obKey = $obKeyFileService->getOneKeyTG();
-                    if ($obKey) {
-                        $this->sendKey($obKey->path);
-                        $obKeyFileService->keyTransferSend($obKey);
-                        $obKeyVpnRepository->setKey($obKey, $this->obUser->getIdTelegram());
-
-
-                    } else {
-                        $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html');
-                        $this->sendInstruction();
+                case '/get_key_user';
+                    $arKeyUser = $obKeyVpnRepository->getUserKeyById($this->idChat);
+                    if (count($arKeyUser) >= 4) {
+                        throw new \Exception('Key user > 3');
                     }
-
+                    foreach ($arKeyUser as $obKeyUser) {
+                        $path = $obKeyFileService->getPathSend() . $obKeyUser->getName();
+                        $this->sendKey($path);
+                    }
+                    break;
+                case '/get_key';
+                    $arUserKey = $obKeyVpnRepository->getUserKeyById($this->idChat);
+                    if (count($arUserKey) < 3) {
+                        $obKey = $obKeyFileService->getOneKeyTG();
+                        if ($obKey) {
+                            $this->sendKey($obKey->path);
+                            $obKeyFileService->keyTransferSend($obKey);
+                            $obKeyVpnRepository->setKey($obKey, $this->obUser->getIdTelegram());
+                        } else {
+                            $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html');
+                            $this->sendInstruction();
+                        }
+                    } else {
+                        $array_keyboard[] = [
+                            ["callback_data" => "/get_key_user", "text" => "Посмотреть мои ключи"],
+                            [
+                                "url" => "https://t.me/share/url?url=t.me/a_test_table_bot&text=YOUR_TEXT",
+                                "text" => "Техподдержка",
+                            ],
+                        ];
+                        $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
+                        $this->obBot->sendMessage(
+                            $this->idChat,
+                            'Не больше 3 ключей на один аккаунт',
+                            'html',
+                            null,
+                            null,
+                            $inline_keyboard
+                        );
+                    }
                     break;
                 case '/start';
                     $array_keyboard = [];
@@ -132,14 +160,14 @@ class TelegramController extends AbstractController
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    private function sendKey($path)
+    private function sendKey($path, string $status = '')
     {
         $array_keyboard[] = [
             ["callback_data" => "/instruction", "text" => "📗 Инструкция по установке 📗"]
         ];
         $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
         $obDocument = new \CURLFile($path);
-        $this->obBot->sendDocument($this->idChat, $obDocument,'ключ openVpn',null, $inline_keyboard  );
+        $this->obBot->sendDocument($this->idChat, $obDocument,$status?:'🟢 active',null, $inline_keyboard  );
     }
 
     /**

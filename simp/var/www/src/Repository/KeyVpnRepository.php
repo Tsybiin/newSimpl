@@ -22,6 +22,12 @@ class KeyVpnRepository extends ServiceEntityRepository
     }
 
 
+    public function getUserKeyById($idUser): array
+    {
+        return $this->findBy(['id_user' => $idUser],  $orderBy = null, $limit = null, $offset = null);
+    }
+
+
     public function setKey(object $obValue,$idUser): ?KeyVpn
     {
 

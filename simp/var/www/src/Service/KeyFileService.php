@@ -15,7 +15,12 @@ class KeyFileService extends Filesystem
     private $pathNew;
     private $pathSend;
     private array $arNewKeys;
+    private array $arSendKeys;
 
+    public function getPathSend(): string
+    {
+        return $this->pathSend;
+    }
 
      public function __construct()
      {
@@ -28,6 +33,7 @@ class KeyFileService extends Filesystem
     private function setKeys(): void
     {
         $arNewKeys = [];
+        $arSendKeys = [];
         $this->Finder->files()
             ->in($this->pathNew);
         foreach ($this->Finder as $arFile) {
@@ -37,6 +43,19 @@ class KeyFileService extends Filesystem
             ];
         }
         $this->arNewKeys = $arNewKeys;
+
+        $this->Finder->files()
+            ->in($this->pathSend);
+        foreach ($this->Finder as $arFile) {
+            $arSendKeys[] = [
+                'name' => $arFile->getFilename(),
+                'path' => $this->pathNew . $arFile->getRelativePathname(),
+            ];
+        }
+
+        $this->arSendKeys = $arSendKeys;
+
+
     }
 
     public function getOneKeyTG(): object|bool
