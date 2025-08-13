@@ -64,6 +64,7 @@ class TelegramController extends AbstractController
                     if (count($arKeyUser) >= 4) {
                         throw new \Exception('Key user > 3');
                     }
+                    $this->obBot->sendMessage($this->idChat, 'Ваши активные ключи', 'html');
                     foreach ($arKeyUser as $obKeyUser) {
                         $path = $obKeyFileService->getPathSend() . $obKeyUser->getName();
                         $this->sendKey($path);
