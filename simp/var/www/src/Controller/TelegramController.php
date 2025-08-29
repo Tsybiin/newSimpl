@@ -34,8 +34,8 @@ class TelegramController extends AbstractController
         loggerInterface $logger, KeyFileService $obKeyFileService, KeyVpnRepository $obKeyVpnRepository
     ): Response {
         $this->setTextMenu();
-        $this->obBot = new BotApi('7629831918:AAENHMwO8xBsBQSXF0Sfbh6eCeNsUBGgPG4');
-    //    $res =    $this->obBot->setWebhook('https://www.vpnlands.ru/telegram');
+        $this->obBot = new BotApi('8239986885:AAHdg_R1RPw6TgG82KvgKeDQHee_1TZPoKA');
+     //   $res =    $this->obBot->setWebhook('https://www.land-vpn.store/telegram');
         $arResponse['status'] = false;
         $obContent = $this->getDatacontent();
         if ($obContent) {
@@ -86,7 +86,7 @@ class TelegramController extends AbstractController
                         $array_keyboard[] = [
                             ["callback_data" => "/get_key_user", "text" => "Посмотреть мои ключи"],
                             [
-                                "url" => "https://t.me/share/url?url=t.me/a_test_table_bot&text=YOUR_TEXT",
+                                "url" => "https://t.me/share/url?url=t.me/lands_vpn_store_bot&text=Бесплатный VPN",
                                 "text" => "Техподдержка",
                             ],
                         ];
@@ -109,8 +109,8 @@ class TelegramController extends AbstractController
                         ["callback_data" => "/instruction", "text" => "📗 Инструкция 📗"],
                     ];
                       $array_keyboard[] = [
-                          ["url" => "https://telegra.ph/iBoost-Polzovatelskoe-soglashenie-08-12", "text" => "📖 Правила 📖"],
-                          ["url" => "https://t.me/share/url?url=t.me/a_test_table_bot&text=YOUR_TEXT", "text" => "🔗 Поделиться 🔗"]
+                          ["url" => "https://www.land-vpn.store/agreement", "text" => "📖 Правила 📖"],
+                          ["url" => "https://t.me/share/url?url=t.me/lands_vpn_store_bot&text=Бесплатный VPN", "text" => "🔗 Поделиться 🔗"]
                       ];
 
                     $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
@@ -150,10 +150,16 @@ class TelegramController extends AbstractController
     {
         $text = '▪️Установите OpenVPN Connect (<a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn">ANDROID</a>,  <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981">IOS</a>)
 ▪️👆Скачайте ключ конфигурации👆 Выше
-▪️Импортируйте его в программу и подключитесь.
-<a href="https://telegra.ph/instrukciya-08-12-17">Более подробная инструкция</a>';
+▪️Импортируйте его в программу и подключитесь.';
+        $array_keyboard[] = [
+            [
+                "url" => "https://www.land-vpn.store/instruction&text=Бесплатный VPN",
+                "text" => "Более подробная инструкция",
+            ],
+        ];
+        $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
 
-        $this->obBot->sendMessage($this->idChat, $text, 'html',true);
+        $this->obBot->sendMessage($this->idChat, $text, 'html',true,null,$inline_keyboard);
     }
 
     /**
@@ -168,6 +174,7 @@ class TelegramController extends AbstractController
         ];
         $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
         $obDocument = new \CURLFile($path);
+        $obDocument->postname = 'land-vpn.ovpn';
         $this->obBot->sendDocument($this->idChat, $obDocument,$status?:'🟢 active',null, $inline_keyboard  );
     }
 
@@ -199,7 +206,6 @@ class TelegramController extends AbstractController
             file_put_contents('/usr/share/nginx/html/var/log/call.json', print_r($obRequest->getContent(), true));
         }
         $content = $fake ? file_get_contents('/usr/share/nginx/html/var/log/call.json') : $obRequest->getContent();
-     //   dump($content);
         $arContent = json_decode($content, true);
         foreach (['callback_query', 'message'] as $v) {
             if (array_key_exists($v, $arContent)) {

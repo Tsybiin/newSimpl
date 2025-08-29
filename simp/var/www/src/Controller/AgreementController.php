@@ -20,18 +20,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Service\KeyFileService;
 use Symfony\Component\Finder\Finder;
 
-class TestController extends AbstractController
+class AgreementController extends AbstractController
 {
-    public function test(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger ): Response
+    public function agreement(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger ): Response
     {
+            $pageTitle = "О нашей компании";
+            $teamMembers = ['Анна', 'Михаил', 'Ирина'];
+            return $this->render('/agreement.html.twig', [
+                'title' => $pageTitle,
+                'team' => $teamMembers,
+            ]);
 
-        $url = '/usr/share/nginx/html/exchange/log/openvpn-status.log';
-
-
-        $dataNow =  new \DateTime('Mon Aug  4 19:44:34 2025');
-        $date = $dataNow->setTimezone(new \DateTimeZone('Europe/Moscow'));
-
-        return new Response($this->json(['$arResponse']));
 
     }
 }

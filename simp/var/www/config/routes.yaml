@@ -12,7 +12,11 @@ add-telegram:
   path: /telegram
   # the controller value has the format 'controller_class::method_name'
   controller: App\Controller\TelegramController::sendSms
-test:
-    path: /test
+instruction:
+    path: /instruction
     # the controller value has the format 'controller_class::method_name'
-    controller: App\Controller\TestController::test
+    controller: App\Controller\InstructionController::instruction
+agreement:
+  path: /agreement
+  # the controller value has the format 'controller_class::method_name'
+  controller: App\Controller\AgreementController::agreement

@@ -1,0 +1,201 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+}
+h1 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 2.5rem;
+}
+h2 {
+    color: #2980b9;
+    margin: 35px 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    color: #3498db;
+    margin: 25px 0 15px 0;
+}
+p {
+    margin-bottom: 20px;
+    font-size: 2.05rem;
+}
+ul, ol {
+    margin-bottom: 25px;
+    padding-left: 25px;
+}
+li {
+    margin-bottom: 12px;
+}
+.platform-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border-left: 4px solid #3498db;
+}
+.android {
+    border-left-color: #a4c639;
+}
+.ios {
+    border-left-color: #007aff;
+}
+.telegram {
+    border-left-color: #0088cc;
+}
+.step {
+    margin-bottom: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+.step-number {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 50%;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.android .step-number {
+    background: #a4c639;
+}
+.ios .step-number {
+    background: #007aff;
+}
+.telegram .step-number {
+    background: #0088cc;
+}
+.screenshot {
+    text-align: center;
+    margin: 25px 0;
+    padding: 15px;
+    /*background: #f8f9fa;*/
+    /*border-radius: 8px;*/
+}
+.screenshot-placeholder {
+    height: 400px;
+    /*background: linear-gradient(45deg, #e6e6e6 25%, #f0f0f0 25%, #f0f0f0 50%, #e6e6e6 50%, #e6e6e6 75%, #f0f0f0 75%, #f0f0f0 100%);*/
+    /*background-size: 20px 20px;*/
+    /*border-radius: 8px;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*color: #666;*/
+    /*font-style: italic;*/
+    border: 1px dashed #ccc;
+}
+.caption {
+    font-style: italic;
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+.note {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+}
+.warning {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+}
+.tip {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+}
+.button {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px 5px;
+    transition: background 0.3s;
+}
+.android-button {
+    background: #a4c639;
+}
+.ios-button {
+    background: #007aff;
+}
+.telegram-button {
+    background: #0088cc;
+}
+.button:hover {
+    opacity: 0.9;
+}
+.app-logo {
+    width: 150px;
+    margin: 15px auto;
+    display: block;
+}
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #777;
+}
+.qr-code {
+    width: 200px;
+    height: 200px;
+    margin: 15px auto;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .platform-section {
+        padding: 15px;
+    }
+}
