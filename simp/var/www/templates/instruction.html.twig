@@ -6,11 +6,11 @@
 
 {% block body %}
     <link rel="stylesheet" href="{{asset('build/css/instruction.css')}}">
-{#    <div class="container">#}
-        <header>
-            <h1>Установка OpenVPN с загрузкой ключа через Telegram бота</h1>
-            <p>Полное руководство по настройке VPN на Android и iOS с получением конфигурации через Telegram</p>
-        </header>
+    <div class="container">
+{#        <header>#}
+{#            <h1>Установка OpenVPN с загрузкой ключа через Telegram бота</h1>#}
+{#            <p>Полное руководство по настройке VPN на Android и iOS с получением конфигурации через Telegram</p>#}
+{#        </header>#}
         <section class="platform-section telegram">
             <h2>Получение конфигурации через Telegram бота</h2>
             <div class="step">
@@ -63,7 +63,7 @@
                 <p>Нажмите  BROWSE</p>
                 <div class="screenshot">
                     <div class="screenshot-placeholder">
-                        <img width="200"  class="screenshot-placeholder" src="{{ asset('/build/img/instruction_4.png') }}" alt="banner"> <img width="200"  class="screenshot-placeholder" src="{{ asset('/build/img/instruction_5.png') }}" alt="banner">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_4.png') }}" alt="banner"> <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_5.png') }}" alt="banner">
                     </div>
                     <span class="caption">Импорт профиля в OpenVPN Connect</span>
                 </div>
@@ -75,7 +75,7 @@
                 <p>Приложение автоматически обработает файл конфигурации.</p>
                 <div class="screenshot">
                     <div class="screenshot-placeholder">
-                        <img width="200"  class="screenshot-placeholder" src="{{ asset('/build/img/instruction_6.png') }}" alt="banner">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_6.png') }}" alt="banner">
                     </div>
                     <span class="caption">Экран настройки подключения</span>
                 </div>
@@ -87,7 +87,7 @@
                 <p>На главном экране приложения передвиньте переключатель в положение "ON" для подключения.</p>
                 <div class="screenshot">
                     <div class="screenshot-placeholder">
-                        <img width="200"  class="screenshot-placeholder" src="{{ asset('/build/img/instruction_7.png') }}" alt="banner">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_7.png') }}" alt="banner">
                     </div>
                     <span class="caption">Активация VPN подключения</span>
                 </div>
@@ -177,9 +177,9 @@
             </div>
         </section>
 
-        <footer>
-            <p>Инструкция по установке OpenVPN с загрузкой конфигурации через Telegram бота</p>
-            <p>© 2025 </p>
-        </footer>
-{#    </div>#}
+{#        <footer>#}
+{#            <p>Инструкция по установке OpenVPN с загрузкой конфигурации через Telegram бота</p>#}
+{#            <p>© 2025 </p>#}
+{#        </footer>#}
+    </div>
 {% endblock %}

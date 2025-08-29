@@ -153,7 +153,7 @@ class TelegramController extends AbstractController
 ▪️Импортируйте его в программу и подключитесь.';
         $array_keyboard[] = [
             [
-                "url" => "https://www.land-vpn.store/instruction&text=Бесплатный VPN",
+                "url" => "https://www.land-vpn.store/instruction/",
                 "text" => "Более подробная инструкция",
             ],
         ];

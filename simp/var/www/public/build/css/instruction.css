@@ -11,7 +11,7 @@ body {
     padding: 20px;
 }
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     background: white;
     padding: 30px;
@@ -103,7 +103,7 @@ li {
     /*border-radius: 8px;*/
 }
 .screenshot-placeholder {
-    height: 400px;
+    height: 500px;
     /*background: linear-gradient(45deg, #e6e6e6 25%, #f0f0f0 25%, #f0f0f0 50%, #e6e6e6 50%, #e6e6e6 75%, #f0f0f0 75%, #f0f0f0 100%);*/
     /*background-size: 20px 20px;*/
     /*border-radius: 8px;*/
@@ -189,14 +189,23 @@ footer {
     border: 1px solid #ddd;
     border-radius: 8px;
 }
+
+img {
+    width: 300px
+}
+
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        padding: 10px;
     }
     h1 {
         font-size: 2rem;
     }
     .platform-section {
         padding: 15px;
+    }
+    p {
+        margin-bottom: 20px;
+        font-size: 1.8rem;
     }
 }
