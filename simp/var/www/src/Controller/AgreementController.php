@@ -24,13 +24,7 @@ class AgreementController extends AbstractController
 {
     public function agreement(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger ): Response
     {
-            $pageTitle = "О нашей компании";
-            $teamMembers = ['Анна', 'Михаил', 'Ирина'];
             return $this->render('/agreement.html.twig', [
-                'title' => $pageTitle,
-                'team' => $teamMembers,
             ]);
-
-
     }
 }

@@ -34,11 +34,11 @@ class APPOpenVpnStatusCronCommand extends Command
 
         $startTime = new \DateTime();
         $startTime->setTimezone(new \DateTimeZone('Europe/Moscow'));
-        $startTime->setTime(0,00,00);
+        $startTime->setTime(02,00,00);
 
         $stopTime = new \DateTime();
         $stopTime->setTimezone(new \DateTimeZone('Europe/Moscow'));
-        $stopTime->setTime(00,10,00);
+        $stopTime->setTime(02,10,00);
 
         $current = new \DateTime();
         $current->setTimezone(new \DateTimeZone('Europe/Moscow'));

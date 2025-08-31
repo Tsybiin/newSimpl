@@ -22,19 +22,8 @@ use Symfony\Component\Finder\Finder;
 
 class InstructionController extends AbstractController
 {
-    public function instruction(ManagerRegistry $doctrine, ValidatorInterface $validator,LoggerInterface $logger ): Response
-    {
-
-            // Готовим данные для передачи в шаблон
-            $pageTitle = "О нашей компании";
-            $teamMembers = ['Анна', 'Михаил', 'Ирина'];
-
-            // Передаем данные в шаблон 'page/about.html.twig'
-            return $this->render('/instruction.html.twig', [
-                'title' => $pageTitle,
-                'team' => $teamMembers,
-            ]);
-
-
+    public function instruction(ManagerRegistry $doctrine, ValidatorInterface $validator, LoggerInterface $logger
+    ): Response {
+        return $this->render('/instruction.html.twig', []);
     }
 }

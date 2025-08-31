@@ -49,7 +49,7 @@ class OpenVpnStatusRepository extends ServiceEntityRepository
         $product->setBytesSent($obValue->getBytesSent(),false);
         $this->getEntityManager()->flush();
 
-        $this->getEntityManager()->refresh();
+        $this->getEntityManager()->refresh($product);
 
         return $obValue;
     }
@@ -71,7 +71,7 @@ class OpenVpnStatusRepository extends ServiceEntityRepository
     public function getList($arName): array
     {
         $startOfDay = new \DateTime('today');
-        $startOfDay->setTime(0, 0, 0);
+        $startOfDay->setTime(02, 0, 0);
 
         $qb = $this->createQueryBuilder('p');
         $qb->where($qb->expr()->in('p.name', ':var1'))

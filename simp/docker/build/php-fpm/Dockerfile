@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y zlib1g-dev g++ git libicu-dev zip libzi
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+    && apt-get install -y cron && \
+       rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/share/nginx/html
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl  'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash

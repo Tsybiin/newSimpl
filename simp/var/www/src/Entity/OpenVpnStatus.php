@@ -106,7 +106,7 @@ class OpenVpnStatus
     private function convertToReadableSize($bytes)
     {
         $bytes = $bytes / 1024 / 1024;
-        return round($bytes, 5);
+        return round($bytes, 2);
 
 
         // $symbols = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
