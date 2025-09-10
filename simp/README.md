@@ -34,4 +34,9 @@
 
 Исходящие письма будут попадать в каталог <a  href="./mail">mail</a> <br>
 
+<h5>nginx для вебхуков телеграмма </h5>
+в коньейнере  nginx
+- ngrok config add-authtoken 'TOKEN'
+- ngrok http 80 
+
 

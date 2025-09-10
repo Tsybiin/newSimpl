@@ -10,8 +10,10 @@ services:
         DIR_SITE_CONTAINER: $DIR_SITE_CONTAINER
     ports:
       - 80:80
+      - 443:443
     volumes:
       - $DIR_SITE_LOCAL:$DIR_SITE_CONTAINER
+      - ./docker/nginx/etc:/etc/letsencrypt
     depends_on:
       - php
     restart:
@@ -36,23 +38,13 @@ services:
     networks:
       default:
         ipv4_address: ${IP_MYSQL}
-#  openvpn:
-#    cap_add:
-#      - NET_ADMIN
-#    image: kylemanna/openvpn
-#    container_name: openvpn
-#    ports:
-#      - "1194:1194/udp"
-#    restart: always
-#    volumes:
-#      - ./docker/build/openvpn:/etc/openvpn
-#      - ./docker/build/openvpn/log:/tmp/
   php:
     container_name: php-fpm
     build: docker/build/php-fpm
     volumes:
       - ${DIR_SITE_LOCAL}:${DIR_SITE_CONTAINER}
       - ./docker/build/php-fpm/hosts:/etc/hosts
+      - ./docker/build/php-fpm/php.ini:/usr/local/etc/php/php.ini
       - ./var/mail:/var/mail
     networks:
       default:

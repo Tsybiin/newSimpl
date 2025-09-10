@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Homepage - RankedChoice{% endblock %}
+{% block page_keywords %}Jeans, Jackets{% endblock %}
+{% block page_description %}Main page of RankedChoice shop!{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{asset('build/css/instruction.css')}}">
+    <div class="container">
+{#        <header>#}
+{#            <h1>Установка OpenVPN с загрузкой ключа через Telegram бота</h1>#}
+{#            <p>Полное руководство по настройке VPN на Android и iOS с получением конфигурации через Telegram</p>#}
+{#        </header>#}
+        <section class="platform-section telegram">
+            <h2>Получение конфигурации через Telegram бота</h2>
+            <div class="step">
+                <h3><span class="step-number">1</span> Запустите бота и получите конфигурацию</h3>
+                <p>Нажмите кнопку "Меню" или введите команду /start для активации бота.</p>
+                <p>Следуйте инструкциям бота для получения файла конфигурации (.ovpn).</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img   class="screenshot-placeholder" src="{{ asset('/build/img/instruction_1.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">Получение конфигурации от бота</span>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span> Скачайте файл конфигурации</h3>
+                <p>Когда бот отправит вам файл .ovpn, нажмите на него для скачивания.</p>
+                <p>Файл автоматически сохранится в папке "Загрузки" на вашем устройстве.</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img  class="screenshot-placeholder" src="{{ asset('/build/img/instruction_2.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">Скачивание файла конфигурации</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="platform-section android">
+            <h2>Установка OpenVPN на Android</h2>
+
+            <div class="step">
+                <h3><span class="step-number">1</span> Скачивание приложения</h3>
+                <p>Откройте Google Play Market на вашем устройстве Android.</p>
+                <p>В поисковой строке введите "OpenVPN Connect" и найдите официальное приложение.</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img   class="screenshot-placeholder" src="{{ asset('/build/img/instruction_3.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">OpenVPN Connect в Google Play Market</span>
+                </div>
+                <p>Нажмите кнопку "Установить" и дождитесь завершения процесса установки.</p>
+                <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn" class="button android-button">Скачать для Android</a>
+                <a href="https://apps.apple.com/us/app/openvpn-connect/id590379981" class="button ios-button">Скачать для iOS</a>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span> Импорт профиля из Telegram</h3>
+                <p>Запустите приложение OpenVPN Connect.</p>
+                <p>Нажмите кнопку "Upload File" для импорта файла конфигурации.</p>
+                <p>Нажмите  BROWSE</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_4.png') }}" alt="banner"> <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_5.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">Импорт профиля в OpenVPN Connect</span>
+                </div>
+                <p>Перейдите в папку "Telegram" или "Загрузки", найдите файл .ovpn, полученный от бота, и выберите его.</p>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span> Настройка подключения</h3>
+                <p>Приложение автоматически обработает файл конфигурации.</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_6.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">Экран настройки подключения</span>
+                </div>
+                <p>Нажмите "ADD" для добавления профиля.</p>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">4</span> Подключение к VPN</h3>
+                <p>На главном экране приложения передвиньте переключатель в положение "ON" для подключения.</p>
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        <img class="screenshot-placeholder" src="{{ asset('/build/img/instruction_7.png') }}" alt="banner">
+                    </div>
+                    <span class="caption">Активация VPN подключения</span>
+                </div>
+                <p>При первом подключении система запросит разрешение на создание VPN-подключения. Нажмите "OK".</p>
+            </div>
+        </section>
+
+{#        <section class="platform-section ios">#}
+{#            <h2>Установка OpenVPN на iPhone</h2>#}
+
+{#            <div class="step">#}
+{#                <h3><span class="step-number">1</span> Скачивание приложения</h3>#}
+{#                <p>Откройте App Store на вашем iPhone.</p>#}
+{#                <p>В поиске введите "OpenVPN Connect" и найдите официальное приложение.</p>#}
+{#                <div class="screenshot">#}
+{#                    <div class="screenshot-placeholder">#}
+{#                        Скриншот: Приложение в App Store#}
+{#                    </div>#}
+{#                    <span class="caption">OpenVPN Connect в App Store</span>#}
+{#                </div>#}
+{#                <p>Нажмите кнопку "Загрузить" и дождитесь завершения установки.</p>#}
+{#                <a href="https://apps.apple.com/us/app/openvpn-connect/id590379981" class="button ios-button">Скачать для iOS</a>#}
+{#            </div>#}
+
+{#            <div class="step">#}
+{#                <h3><span class="step-number">2</span> Импорт профиля из Telegram</h3>#}
+{#                <p>Откройте Telegram и перейдите к файлу .ovpn, полученному от бота.</p>#}
+{#                <p>Нажмите на файл, затем нажмите на кнопку "Поделиться".</p>#}
+{#                <div class="screenshot">#}
+{#                    <div class="screenshot-placeholder">#}
+{#                        Скриншот: Поделиться файлом из Telegram#}
+{#                    </div>#}
+{#                    <span class="caption">Открытие файла конфигурации в Telegram</span>#}
+{#                </div>#}
+{#                <p>В списке приложений выберите "OpenVPN".</p>#}
+{#                <p>Файл автоматически импортируется в приложение OpenVPN Connect.</p>#}
+{#            </div>#}
+
+{#            <div class="step">#}
+{#                <h3><span class="step-number">3</span> Настройка подключения</h3>#}
+{#                <p>В приложении OpenVPN нажмите "+" в верхнем правом углу.</p>#}
+{#                <p>Приложение обработает импортированный файл конфигурации.</p>#}
+{#                <div class="screenshot">#}
+{#                    <div class="screenshot-placeholder">#}
+{#                        Скриншот: Добавление профиля в iOS#}
+{#                    </div>#}
+{#                    <span class="caption">Добавление профиля в OpenVPN</span>#}
+{#                </div>#}
+{#                <p>При необходимости введите логин и пароль, предоставленные ботом.</p>#}
+{#                <p>Нажмите "ADD" для добавления профиля.</p>#}
+{#            </div>#}
+
+{#            <div class="step">#}
+{#                <h3><span class="step-number">4</span> Подключение к VPN</h3>#}
+{#                <p>Передвиньте переключатель напротив добавленного профиля в положение "ON".</p>#}
+{#                <div class="screenshot">#}
+{#                    <div class="screenshot-placeholder">#}
+{#                        Скриншот: Подключение в iOS#}
+{#                    </div>#}
+{#                    <span class="caption">Активация VPN подключения на iPhone</span>#}
+{#                </div>#}
+{#                <p>Система запросит разрешение на добавление VPN-конфигурации. Нажмите "Разрешить".</p>#}
+{#                <p>При необходимости введите пароль устройства или используйте Touch ID/Face ID для подтверждения.</p>#}
+{#            </div>#}
+{#        </section>#}
+
+        <section class="platform-section">
+            <h2>Проверка подключения и устранение неполадок</h2>
+
+            <div class="step">
+                <h3>Проверка работоспособности VPN</h3>
+                <p>После подключения откройте браузер и посетите сайт <a href="https://whatismyipaddress.com/" target="_blank">whatismyipaddress.com</a>.</p>
+
+                <a  class="button" href="https://2ip.ru/"><p>Убедитесь, что отображаемый IP-адрес отличается от вашего реального адреса.</p></a>
+            </div>
+
+            <div class="step">
+                <h3>Частые проблемы и решения</h3>
+                <ul>
+{#                    <li><strong>Нет интернета при подключенном VPN:</strong> Попробуйте переключиться на другой сервер или протокол</li>#}
+                    <li><strong>Приложение не видит файл .ovpn:</strong> Убедитесь, что файл сохранен в памяти устройства, а не только в кеше Telegram</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <p><strong>Важно:</strong> Если у вас возникли проблемы с подключением, обратитесь в поддержку через <a  class="button" href="https://t.me/lands_vpn_store_bot">Телеграм Бота</a></p>
+            </div>
+        </section>
+
+{#        <footer>#}
+{#            <p>Инструкция по установке OpenVPN с загрузкой конфигурации через Telegram бота</p>#}
+{#            <p>© 2025 </p>#}
+{#        </footer>#}
+    </div>
+{% endblock %}
