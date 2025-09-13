@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /var/www/newSimpl/simp/var/www/
+tar -czvf $HOME/backup/keys/mycoolwebsite_$(date +%Y%m%d).tar.gz keys
