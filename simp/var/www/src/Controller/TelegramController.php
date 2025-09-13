@@ -79,14 +79,20 @@ class TelegramController extends AbstractController
                             $obKeyFileService->keyTransferSend($obKey);
                             $obKeyVpnRepository->setKey($obKey, $this->obUser->getIdTelegram());
                         } else {
-                            $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html');
-                            $this->sendInstruction();
+                            $array_keyboard[] = [
+                                [
+                                    "url" => "https://t.me/J_planet_old/",
+                                    "text" => "Техподдержка",
+                                ],
+                            ];
+                            $inline_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($array_keyboard);
+                            $this->obBot->sendMessage($this->idChat, 'Ключи закончились 🙃', 'html',null,null,$inline_keyboard);
                         }
                     } else {
                         $array_keyboard[] = [
                             ["callback_data" => "/get_key_user", "text" => "Посмотреть мои ключи"],
                             [
-                                "url" => "https://t.me/share/url?url=t.me/lands_vpn_store_bot&text=Бесплатный VPN",
+                                "url" => "https://t.me/J_planet_old/",
                                 "text" => "Техподдержка",
                             ],
                         ];
